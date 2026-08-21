@@ -1,349 +1,64 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-  <meta name="theme-color" content="#3b0f1f" />
-  <title>Gabarito Max - TJ CE 2026 | Versão Teste</title>
-  <style>
-    :root {
-      --max-dark: #120814;
-      --max-panel: #26101d;
-      --max-panel-2: #3b0f1f;
-      --max-accent: #f5c542;
-      --max-accent-2: #c79b2b;
-      --max-text: #ffffff;
-      --max-gray: #d9cfe0;
-      --max-correct: #00e676;
-      --max-wrong: #ff1744;
-      --max-border: rgba(245,197,66,.34);
-    }
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif; }
-    html, body { background: radial-gradient(circle at top, #3b0f1f 0%, #120814 58%, #08040a 100%); color: var(--max-text); min-height: 100vh; width: 100%; }
-    body { display: flex; justify-content: center; }
-    .app-container { width: 100%; max-width: 860px; display: flex; flex-direction: column; align-items: center; padding-bottom: 24px; }
-    header { width: 100%; text-align: center; padding: 24px 14px 15px; border-bottom: 4px solid var(--max-accent); background: linear-gradient(135deg, #210a16, #4b1227); box-shadow: 0 4px 20px rgba(245,197,66,0.18); z-index: 10; }
-    .logo-text { font-size: 2.05rem; font-weight: 950; color: #fff; margin-bottom: 8px; letter-spacing: 1.5px; text-transform: uppercase; font-style: italic; }
-    .logo-text span { color: var(--max-accent); }
-    header p.sub-title { font-size: .95rem; color: var(--max-accent); text-transform: uppercase; letter-spacing: .8px; font-weight: 800; margin-bottom: 10px; }
-    .badge-premium { background: rgba(0,0,0,.22); padding: 7px 12px; border-radius: 20px; display: inline-block; border: 1px solid var(--max-accent); }
-    .badge-premium span { color: var(--max-text); font-size: .8rem; font-weight: 800; text-transform: uppercase; letter-spacing: .4px; }
-    .screen { display: none; width: 100%; padding: 18px 14px; flex-direction: column; align-items: center; }
-    .screen.active { display: flex; animation: fadeIn .28s ease; }
-    @keyframes fadeIn { from {opacity:0; transform:translateY(8px)} to {opacity:1; transform:translateY(0)} }
-    #screen-start h3 { margin: 10px 0 14px; font-size: 1rem; text-align:center; font-weight:700; color:#fff; }
-    .info-box { width:100%; background: rgba(0,0,0,.23); border:1px solid var(--max-border); border-left:5px solid var(--max-accent); border-radius:10px; padding:14px; margin-bottom:14px; line-height:1.45; color:#f3edf7; font-size:.92rem; }
-    .menu-grid { display:grid; grid-template-columns: 1fr; gap:10px; width:100%; }
-    .btn { width:100%; padding:15px; border:2px solid rgba(245,197,66,.18); background: linear-gradient(135deg, var(--max-panel), var(--max-panel-2)); color:var(--max-text); border-radius:9px; font-size:.93rem; font-weight:800; cursor:pointer; transition:.22s; text-transform:uppercase; display:flex; justify-content:space-between; align-items:center; box-shadow:0 4px 12px rgba(0,0,0,.28); }
-    .btn:hover:not(:disabled) { border-color: var(--max-accent); color: var(--max-accent); transform: translateY(-1px); }
-    .btn:disabled { opacity:.86; cursor:not-allowed; }
-    .btn.correct { background: var(--max-correct)!important; color:#000!important; border-color:var(--max-correct)!important; }
-    .btn.wrong { background: var(--max-wrong)!important; color:#fff!important; border-color:var(--max-wrong)!important; }
-    #question-text { font-size:1.05rem; text-align:justify; margin-bottom:14px; padding:15px; background:rgba(0,0,0,.23); border-radius:9px; width:100%; line-height:1.45; border-left:4px solid var(--max-accent); font-weight:700; }
-    .status-bar { width:100%; display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; font-size:.88rem; color:var(--max-gray); font-weight:800; text-transform:uppercase; border-bottom:2px solid rgba(245,197,66,.22); padding-bottom:8px; gap:10px; }
-    #options-container { width:100%; display:flex; flex-direction:column; gap:10px; }
-    .option-btn { justify-content:flex-start; text-align:left; line-height:1.35; padding:12px 14px; font-size:.91rem; text-transform:none; font-weight:600; }
-    #comment-box { display:none; width:100%; padding:14px; margin-top:14px; background:#100710; border-left:5px solid var(--max-accent); border-radius:6px; text-align:justify; }
-    #comment-box h4 { color:var(--max-accent); margin-bottom:8px; font-size:.9rem; text-transform:uppercase; letter-spacing:.8px; }
-    #comment-box p { font-size:.92rem; color:#f0edf2; line-height:1.45; }
-    .btn-acao { background:var(--max-accent); color:#000; border:none; padding:14px; border-radius:8px; font-weight:900; margin-top:16px; width:100%; cursor:pointer; text-transform:uppercase; letter-spacing:.7px; transition:.22s; display:none; font-size:.98rem; }
-    .btn-acao:hover { background:#ffd966; box-shadow:0 0 18px rgba(245,197,66,.3); }
-    .btn-voltar { background:transparent; border:2px solid rgba(255,255,255,.58); color:var(--max-gray); margin-top:12px; padding:12px; border-radius:8px; width:100%; cursor:pointer; text-transform:uppercase; font-weight:800; transition:.22s; }
-    .btn-voltar:hover { background:#3b0f1f; color:#fff; border-color:#fff; }
-    .result-card { width:100%; background:linear-gradient(135deg, var(--max-panel), var(--max-panel-2)); border:1px solid var(--max-border); border-radius:14px; padding:24px 18px; text-align:center; box-shadow:0 8px 28px rgba(0,0,0,.3); }
-    .result-card h2 { font-size:1.7rem; margin-bottom:10px; }
-    .result-score { font-size:4rem; font-weight:950; color:var(--max-accent); margin-bottom:6px; }
-    .result-desc { color:var(--max-gray); margin-bottom:16px; text-transform:uppercase; font-weight:800; font-size:.9rem; }
-    .diagnostico { margin-top:14px; padding:14px; background:rgba(0,0,0,.24); border-radius:10px; border:1px solid rgba(255,255,255,.13); text-align:left; line-height:1.45; }
-    .diagnostico b { color:var(--max-accent); }
-    @media(max-width:600px){
-      header{padding:15px 8px 10px} .logo-text{font-size:1.55rem} header p.sub-title{font-size:.76rem} .badge-premium span{font-size:.68rem}
-      .screen{padding:10px} #question-text{font-size:.94rem; padding:12px} .status-bar{font-size:.77rem} .btn{padding:12px 10px; font-size:.8rem}
-      .option-btn{font-size:.82rem} .result-score{font-size:3.15rem}
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#3b0f1f">
+<title>Gabarito Max — TJ CE 2026 | Versão Gratuita</title>
+<style>
+:root{--bg:#100711;--panel:#24101d;--panel2:#3b0f1f;--gold:#f5c542;--text:#fff;--muted:#d9cfe0;--green:#00e676;--red:#ff1744}
+*{box-sizing:border-box;margin:0;padding:0;font-family:"Segoe UI",Tahoma,Verdana,sans-serif}html,body{min-height:100%;background:radial-gradient(circle at top,#4b1227 0,#160913 48%,#080408 100%);color:var(--text)}body{display:flex;justify-content:center}.app{width:100%;max-width:900px;padding-bottom:28px}header{text-align:center;padding:22px 14px 16px;border-bottom:4px solid var(--gold);background:linear-gradient(135deg,#210a16,#4b1227)}.logo{font-size:2rem;font-weight:950;font-style:italic;letter-spacing:1px}.logo span{color:var(--gold)}.subtitle{margin-top:6px;color:var(--gold);font-weight:900;text-transform:uppercase}.badge{display:inline-block;margin-top:10px;padding:7px 12px;border:1px solid var(--gold);border-radius:999px;font-size:.78rem;font-weight:900}.screen{display:none;padding:18px 14px}.screen.active{display:block}.hero{padding:18px;background:linear-gradient(135deg,rgba(245,197,66,.12),rgba(107,33,168,.12));border:1px solid rgba(245,197,66,.32);border-radius:16px;margin-bottom:14px}.hero h2{color:var(--gold);margin-bottom:8px;text-transform:uppercase}.hero p{line-height:1.5;color:#f7eff7}.premium-cta{display:block;width:100%;text-align:center;text-decoration:none;background:linear-gradient(135deg,#ffd866,#f5c542);color:#160b00;font-weight:950;text-transform:uppercase;padding:15px;border-radius:11px;margin:14px 0 18px;box-shadow:0 0 22px rgba(245,197,66,.24)}.premium-cta small{display:block;font-size:.74rem;margin-top:3px}.menu{display:grid;gap:10px}.btn{width:100%;padding:14px 13px;border:2px solid rgba(245,197,66,.22);background:linear-gradient(135deg,var(--panel),var(--panel2));color:#fff;border-radius:10px;font-weight:850;cursor:pointer;display:flex;justify-content:space-between;align-items:center;text-align:left}.btn:hover{border-color:var(--gold)}.btn.locked{border-color:rgba(245,197,66,.55);background:linear-gradient(135deg,#1a0c15,#32120d)}.option{justify-content:flex-start;text-transform:none;font-weight:650}.correct{background:var(--green)!important;color:#001b0b!important}.wrong{background:var(--red)!important;color:#fff!important}.status{display:flex;justify-content:space-between;color:var(--muted);font-weight:900;border-bottom:2px solid rgba(245,197,66,.22);padding-bottom:8px;margin-bottom:12px}.question{padding:15px;border-radius:10px;background:rgba(0,0,0,.28);border-left:5px solid var(--gold);line-height:1.45;font-weight:750;margin-bottom:12px}.options{display:grid;gap:9px}.comment{display:none;margin-top:14px;padding:14px;border-left:5px solid var(--gold);background:#0d050b;border-radius:8px;line-height:1.45}.comment h4{color:var(--gold);margin-bottom:7px}.next,.back{width:100%;padding:13px;border-radius:9px;font-weight:900;text-transform:uppercase;margin-top:12px;cursor:pointer}.next{display:none;background:var(--gold);border:0;color:#111}.back{background:transparent;border:2px solid #aa8fa0;color:#fff}.result{text-align:center;padding:22px;background:linear-gradient(180deg,#321324,#180b14);border:1px solid rgba(245,197,66,.32);border-radius:14px}.score{font-size:3.7rem;color:var(--gold);font-weight:950}.diag{margin-top:14px;text-align:left;padding:14px;background:rgba(0,0,0,.25);border-radius:10px;line-height:1.45}.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.82);display:none;align-items:center;justify-content:center;padding:18px;z-index:9999}.modal-overlay.show{display:flex}.modal{width:100%;max-width:520px;background:linear-gradient(180deg,#40152c,#160912);border:2px solid var(--gold);border-radius:18px;padding:24px 18px;text-align:center;box-shadow:0 18px 60px rgba(0,0,0,.65)}.modal h2{color:var(--gold);font-size:1.45rem;margin-bottom:10px}.modal p{line-height:1.5;margin-bottom:9px}.modal .price{font-size:1.8rem;color:var(--gold);font-weight:950}.buy{display:block;background:var(--gold);color:#110700;text-decoration:none;font-weight:950;text-transform:uppercase;padding:15px;border-radius:10px;margin-top:14px}.continue{width:100%;margin-top:10px;padding:12px;border-radius:9px;background:transparent;color:#fff;border:2px solid #a8869c;font-weight:850;cursor:pointer}@media(max-width:600px){.logo{font-size:1.55rem}.subtitle{font-size:.78rem}.badge{font-size:.68rem}.screen{padding:11px}.btn{font-size:.82rem;padding:12px 10px}.question{font-size:.94rem}.modal{padding:20px 14px}}
+</style>
 </head>
 <body>
-<div class="app-container">
-  <header>
-    <div class="logo-text">GABARITO <span>MAX</span></div>
-    <p class="sub-title">TJ CE 2026 Premium | Técnico Judiciário - Área Judiciária</p>
-    <div class="badge-premium"><span>2 módulos liberados | 20 questões demo | Premium com 8 módulos e 160 questões por R$ 19,90</span></div>
-  </header>
-
-  <div id="screen-start" class="screen active">
-    <div class="info-box">
-      <strong>Versão teste TJ CE 2026:</strong> experimente 2 módulos gratuitos no padrão FCC. A versão premium libera 8 módulos completos, 160 questões comentadas e simulado final. <br><strong>Valor do acesso premium: R$ 19,90.</strong>
-    </div>
-    <h3>Escolha um módulo para começar:</h3>
-    <div class="menu-grid" id="menu-grid"></div>
-  </div>
-
-  <div id="screen-quiz" class="screen">
-    <div class="status-bar">
-      <span id="materia-titulo">Módulo</span>
-      <span id="contador-questao">1/10</span>
-    </div>
-    <div id="question-text">Carregando pergunta...</div>
-    <div id="options-container"></div>
-    <div id="comment-box">
-      <h4>Comentário do Professor:</h4>
-      <p id="comment-text"></p>
-    </div>
-    <button id="btn-next" class="btn-acao" onclick="proximaQuestao()">Próxima Questão ➔</button>
-    <button class="btn-voltar" onclick="voltarInicio()">🔙 Retornar ao menu</button>
-  </div>
-
-  <div id="screen-result" class="screen">
-    <div class="result-card">
-      <h2>Módulo concluído</h2>
-      <div id="score-display" class="result-score">0/10</div>
-      <p class="result-desc">Desempenho na versão teste</p>
-      <div class="diagnostico" id="diagnostico-final"></div>
-      <div class="diagnostico" style="border-left-color: var(--max-accent); margin-top:14px;">
-        <b>Desbloqueie o Premium TJ CE 2026 por R$ 19,90</b><br>
-        Acesso a 8 módulos, 160 questões comentadas e Simulado Final FCC.
-        <br><br>
-        <a class="upsell-link" href="https://pay.kiwify.com.br/ut2sHA7" target="_blank" rel="noopener noreferrer">🔥 Liberar acesso completo</a>
-      </div>
-      <button class="btn-acao" style="display:block" onclick="refazerModulo()">Refazer este módulo</button>
-      <button class="btn-voltar" onclick="voltarInicio()">🔙 Voltar ao menu</button>
-    </div>
-  </div>
+<div class="app">
+<header><div class="logo">GABARITO <span>MAX</span></div><div class="subtitle">TJ CE 2026 — Técnico Judiciário • Área Judiciária</div><div class="badge">VERSÃO GRATUITA • 2 MÓDULOS • 20 QUESTÕES • PREMIUM R$ 19,90</div></header>
+<section id="start" class="screen active">
+<div class="hero"><h2>Treine grátis antes de decidir</h2><p>Faça 20 questões comentadas no padrão FCC. O Premium libera 8 módulos completos, 160 questões comentadas e Simulado Final FCC.</p></div>
+<a class="premium-cta" href="https://pay.kiwify.com.br/ut2sHA7" target="_blank" rel="noopener">Acessar TJ CE 2026 Premium — R$ 19,90<small>8 módulos • 160 questões comentadas • Simulado Final</small></a>
+<div id="menu" class="menu"></div>
+</section>
+<section id="quiz" class="screen"><div class="status"><span id="materia"></span><span id="contador"></span></div><div id="question" class="question"></div><div id="options" class="options"></div><div id="comment" class="comment"><h4>Comentário da questão</h4><p id="commentText"></p></div><button id="next" class="next">Próxima questão ➜</button><button class="back" onclick="voltar()">Voltar ao menu</button></section>
+<section id="result" class="screen"><div class="result"><h2>Módulo concluído</h2><div id="score" class="score"></div><div id="diag" class="diag"></div><a class="premium-cta" href="https://pay.kiwify.com.br/ut2sHA7" target="_blank" rel="noopener">Quero o Premium — R$ 19,90<small>Continue com os 8 módulos e o Simulado Final</small></a><button class="back" onclick="voltar()">Voltar ao menu</button></div></section>
 </div>
-
-
-<div id="premiumModal" class="modal-overlay">
-  <div class="modal-box">
-    <h2>Módulo Premium</h2>
-    <p id="premiumModalText">Este módulo faz parte da versão completa do TJ CE 2026.</p>
-    <p>Desbloqueie os 8 módulos completos, com 160 questões comentadas e Simulado Final FCC.</p>
-    <p><strong>Valor promocional: R$ 19,90</strong></p>
-    <div class="modal-actions">
-      <a class="btn-modal primary" href="https://pay.kiwify.com.br/ut2sHA7" target="_blank" rel="noopener noreferrer">🔥 Desbloquear Premium</a>
-      <button class="btn-modal secondary" onclick="fecharPremium()">Continuar na versão teste</button>
-    </div>
-  </div>
-</div>
-
-<audio id="audio-bg" loop src="https://cdn.pixabay.com/download/audio/2022/01/18/audio_d0a13f69d2.mp3?filename=tension-103701.mp3"></audio>
-<audio id="audio-correct" src="https://cdn.pixabay.com/download/audio/2021/08/04/audio_0625c1539c.mp3?filename=success-1-6297.mp3"></audio>
-<audio id="audio-wrong" src="https://cdn.pixabay.com/download/audio/2021/08/04/audio_c6ccf3232f.mp3?filename=error-126627.mp3"></audio>
-
+<div id="premiumModal" class="modal-overlay"><div class="modal"><h2>🔓 Desbloqueie o TJ CE 2026 Premium</h2><p id="modalText">Este módulo faz parte da versão completa.</p><p>✔ 8 módulos completos<br>✔ 160 questões comentadas<br>✔ Simulado Final no padrão FCC</p><div class="price">R$ 19,90</div><a class="buy" href="https://pay.kiwify.com.br/ut2sHA7" target="_blank" rel="noopener">Quero acessar o Premium</a><button class="continue" onclick="fecharPremium()">Continuar na versão gratuita</button></div></div>
 <script>
-  const bancoLocal = {
-"1. Língua Portuguesa — FCC/TJ CE": [
-{q:"Na frase “O servidor encaminhou o processo à secretaria competente”, o emprego da crase está correto porque:", o:["o termo posterior é masculino e exige artigo.", "há fusão da preposição exigida pelo verbo com artigo feminino.", "todo termo ligado a processo exige crase.", "a palavra secretaria está no plural.", "a crase é obrigatória antes de qualquer substantivo."], c:1, comentario:"O verbo encaminhar, no sentido de remeter algo a alguém/algum setor, exige a preposição 'a'; 'secretaria' admite artigo feminino: a + a = à."},
-{q:"Assinale a alternativa em que a concordância verbal está correta.", o:["Houveram muitos recursos contra o edital.", "Fazem três meses desde a publicação.", "Existem candidatos de várias comarcas.", "Deve haverem provas discursivas.", "Tratam-se de normas administrativas."], c:2, comentario:"O verbo 'existir' concorda com o sujeito plural: 'candidatos'. 'Haver' com sentido de existir e 'fazer' indicando tempo são impessoais."},
-{q:"A palavra “judiciário” recebe acento gráfico pela mesma regra de:", o:["café", "câmara", "necessário", "juiz", "país"], c:2, comentario:"'Judiciário' e 'necessário' são paroxítonas terminadas em ditongo crescente, regra cobrada com frequência em provas da FCC."},
-{q:"Em “Embora o prazo fosse curto, os candidatos mantiveram o ritmo de estudos”, a oração iniciada por “Embora” expressa ideia de:", o:["causa", "condição", "concessão", "finalidade", "comparação"], c:2, comentario:"'Embora' introduz oração concessiva: apresenta uma ideia contrária à expectativa, sem impedir a ocorrência do fato principal."},
-{q:"Assinale a frase em que a pontuação está adequada.", o:["O candidato que estudou com antecedência, obteve bom resultado.", "O candidato, que estudou com antecedência obteve, bom resultado.", "O candidato que estudou com antecedência obteve bom resultado.", "O candidato que estudou, com antecedência obteve bom resultado.", "O candidato, que estudou, com antecedência obteve bom resultado."], c:2, comentario:"Não se separa sujeito de verbo por vírgula. A oração restritiva 'que estudou com antecedência' integra o sujeito."},
-{q:"No trecho “A medida foi adotada pelo Tribunal”, a voz verbal é:", o:["ativa", "passiva analítica", "passiva sintética", "reflexiva", "recíproca"], c:1, comentario:"A estrutura 'foi adotada' + agente da passiva ('pelo Tribunal') caracteriza voz passiva analítica."},
-{q:"Assinale a alternativa em que há regência verbal correta.", o:["O técnico assistiu o magistrado na audiência.", "O candidato obedeceu o edital.", "O servidor informou ao chefe sobre o ocorrido.", "O cidadão visou ao cargo público.", "O analista preferiu estudar do que descansar."], c:3, comentario:"No sentido de desejar/almejar, 'visar' exige preposição 'a': visou ao cargo público."},
-{q:"Em “O edital, publicado em maio, alterou a rotina dos candidatos”, a expressão entre vírgulas tem função de:", o:["vocativo", "aposto explicativo", "adjunto adverbial obrigatório", "objeto direto", "predicativo do sujeito"], c:1, comentario:"A expressão 'publicado em maio' explica o termo 'edital' e aparece isolada por vírgulas."},
-{q:"Assinale a alternativa em que a palavra destacada tem sentido conotativo.", o:["O processo chegou à secretaria.", "A prova terá duração de quatro horas.", "O edital acendeu a esperança dos candidatos.", "O servidor consultou o sistema.", "A inscrição foi confirmada."], c:2, comentario:"'Acendeu a esperança' usa linguagem figurada, não literal."},
-{q:"A forma correta de reescrita, mantendo o sentido, é:", o:["É necessário que os candidato estudem.", "É necessário que os candidatos estudem.", "É necessário os candidatos estudar.", "É necessário que os candidatos estuda.", "É necessários que os candidatos estudem."], c:1, comentario:"O verbo no subjuntivo deve concordar com 'os candidatos': estudem."}
-],
-
-"2. Raciocínio Lógico-Matemático": [
-{q:"Se todos os técnicos são servidores e alguns servidores atuam em comarcas do interior, é correto concluir necessariamente que:", o:["todos os técnicos atuam no interior.", "alguns técnicos atuam no interior.", "nenhum técnico atua no interior.", "alguns servidores podem não ser técnicos.", "todo servidor é técnico."], c:3, comentario:"Das premissas, sabe-se que técnicos pertencem ao conjunto dos servidores. A existência de servidores no interior não obriga que sejam técnicos."},
-{q:"Uma taxa de inscrição de R$ 100,00 recebeu acréscimo de 8%. O novo valor é:", o:["R$ 108,00", "R$ 92,00", "R$ 180,00", "R$ 100,80", "R$ 118,00"], c:0, comentario:"8% de 100 = 8. Valor final: 108."},
-{q:"Se 4 servidores analisam 48 processos em 6 horas, mantendo o mesmo ritmo, 6 servidores analisam 72 processos em:", o:["4 horas", "5 horas", "6 horas", "7 horas", "8 horas"], c:2, comentario:"A produtividade por servidor por hora é 48/(4×6)=2 processos. Para 72 processos com 6 servidores: 72/(6×2)=6 horas."},
-{q:"A negação de “Todos os candidatos estudaram Direito Administrativo” é:", o:["Nenhum candidato estudou Direito Administrativo.", "Todos não estudaram Direito Administrativo.", "Algum candidato não estudou Direito Administrativo.", "Algum candidato estudou Direito Administrativo.", "Direito Administrativo não foi estudado."], c:2, comentario:"A negação de proposição universal afirmativa é particular negativa: 'Algum não'."},
-{q:"A sequência 2, 5, 11, 23, 47 segue padrão de multiplicar por 2 e somar 1. O próximo termo é:", o:["89", "93", "94", "95", "96"], c:3, comentario:"47×2+1=95."},
-{q:"Em uma turma, as notas foram 6, 7, 7, 8 e 10. A média aritmética é:", o:["7,0", "7,2", "7,4", "7,6", "8,0"], c:3, comentario:"Soma: 38. Média: 38/5 = 7,6."},
-{q:"A mediana dos valores 12, 7, 9, 15 e 10 é:", o:["7", "9", "10", "12", "15"], c:2, comentario:"Ordenando: 7, 9, 10, 12, 15. O valor central é 10."},
-{q:"Se uma prova tem 60 questões e o candidato acertou 75%, ele acertou:", o:["40", "42", "45", "48", "50"], c:2, comentario:"75% de 60 = 45."},
-{q:"A proposição “Se estudo, então aumento minhas chances” é falsa somente quando:", o:["estudo e aumento minhas chances.", "não estudo e aumento minhas chances.", "estudo e não aumento minhas chances.", "não estudo e não aumento minhas chances.", "aumentar chances é impossível."], c:2, comentario:"Condicional P→Q só é falsa quando P é verdadeira e Q é falsa."},
-{q:"Três candidatos chegaram em ordem: Ana antes de Bruno; Carlos depois de Bruno. A ordem é:", o:["Ana, Carlos, Bruno", "Bruno, Ana, Carlos", "Ana, Bruno, Carlos", "Carlos, Bruno, Ana", "Bruno, Carlos, Ana"], c:2, comentario:"Ana vem antes de Bruno, e Carlos vem depois de Bruno: Ana, Bruno, Carlos."}
-]
-};;
-
-  let moduloAtual = "";
-  let questoesAtual = [];
-  let indiceQuestao = 0;
-  let acertos = 0;
-
-  const screenStart = document.getElementById("screen-start");
-  const screenQuiz = document.getElementById("screen-quiz");
-  const screenResult = document.getElementById("screen-result");
-  const menuGrid = document.getElementById("menu-grid");
-  const materiaTitulo = document.getElementById("materia-titulo");
-  const contadorQuestao = document.getElementById("contador-questao");
-  const questionText = document.getElementById("question-text");
-  const optionsContainer = document.getElementById("options-container");
-  const commentBox = document.getElementById("comment-box");
-  const commentText = document.getElementById("comment-text");
-  const btnNext = document.getElementById("btn-next");
-  const scoreDisplay = document.getElementById("score-display");
-  const diagnosticoFinal = document.getElementById("diagnostico-final");
-  const audioBg = document.getElementById("audio-bg");
-  const audioCorrect = document.getElementById("audio-correct");
-  const audioWrong = document.getElementById("audio-wrong");
-
-  const todosModulos = [
-'1. Língua Portuguesa — FCC/TJ CE',
-'2. Raciocínio Lógico-Matemático',
-'3. Direitos das Pessoas com Deficiência',
-'4. Legislação TJCE e Estatuto do Servidor CE',
-'5. Direito Constitucional',
-'6. Direito Administrativo e Rotina Judiciária',
-'7. Informática e Processo Eletrônico',
-'8. Simulado Final FCC — TJ CE 2026'
-  ];
-
-  function montarMenu() {
-    menuGrid.innerHTML = "";
-    todosModulos.forEach((modulo, index) => {
-      const btn = document.createElement("button");
-      const liberado = Object.prototype.hasOwnProperty.call(bancoLocal, modulo);
-      btn.className = liberado ? "btn" : "btn locked";
-      if (liberado) {
-        btn.onclick = () => iniciarQuiz(modulo);
-        btn.innerHTML = `<span>${modulo}</span><span>10 questões ▶</span>`;
-      } else {
-        btn.onclick = () => abrirPremium(modulo);
-        btn.innerHTML = `<span>${modulo}</span><span>🔒 Premium</span>`;
-      }
-      menuGrid.appendChild(btn);
-    });
-  }
-
-  function trocarTela(telaAtiva) {
-    screenStart.classList.remove("active");
-    screenQuiz.classList.remove("active");
-    screenResult.classList.remove("active");
-    telaAtiva.classList.add("active");
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  }
-
-  function embaralhar(array) {
-    return [...array].sort(() => Math.random() - 0.5);
-  }
-
-  function iniciarQuiz(modulo) {
-    moduloAtual = modulo;
-    questoesAtual = embaralhar(bancoLocal[modulo]);
-    indiceQuestao = 0;
-    acertos = 0;
-    materiaTitulo.textContent = moduloAtual;
-    trocarTela(screenQuiz);
-    mostrarQuestao();
-
-    if (audioBg) {
-      audioBg.volume = 0.12;
-      audioBg.play().catch(() => {});
-    }
-  }
-
-  function mostrarQuestao() {
-    const questao = questoesAtual[indiceQuestao];
-    contadorQuestao.textContent = `${indiceQuestao + 1}/${questoesAtual.length}`;
-    questionText.textContent = questao.q;
-    optionsContainer.innerHTML = "";
-    commentBox.style.display = "none";
-    btnNext.style.display = "none";
-
-    questao.o.forEach((opcao, index) => {
-      const botao = document.createElement("button");
-      botao.className = "btn option-btn";
-      botao.innerHTML = `<strong>${String.fromCharCode(65 + index)})</strong>&nbsp; ${opcao}`;
-      botao.onclick = () => responder(index);
-      optionsContainer.appendChild(botao);
-    });
-  }
-
-  function responder(indiceSelecionado) {
-    const questao = questoesAtual[indiceQuestao];
-    const botoes = optionsContainer.querySelectorAll("button");
-
-    botoes.forEach((btn, i) => {
-      btn.disabled = true;
-      if (i === questao.c) btn.classList.add("correct");
-      if (i === indiceSelecionado && i !== questao.c) btn.classList.add("wrong");
-    });
-
-    if (indiceSelecionado === questao.c) {
-      acertos++;
-      if (audioCorrect) {
-        audioCorrect.currentTime = 0;
-        audioCorrect.play().catch(() => {});
-      }
-    } else {
-      if (audioWrong) {
-        audioWrong.currentTime = 0;
-        audioWrong.play().catch(() => {});
-      }
-    }
-
-    commentText.textContent = questao.comentario;
-    commentBox.style.display = "block";
-    btnNext.style.display = "block";
-  }
-
-  function proximaQuestao() {
-    indiceQuestao++;
-    if (indiceQuestao < questoesAtual.length) {
-      mostrarQuestao();
-    } else {
-      finalizarModulo();
-    }
-  }
-
-  function finalizarModulo() {
-    scoreDisplay.textContent = `${acertos}/${questoesAtual.length}`;
-    const percentual = Math.round((acertos / questoesAtual.length) * 100);
-    let mensagem = "";
-    if (percentual >= 85) {
-      mensagem = "<b>Excelente.</b> Você está com desempenho competitivo. O Premium aumenta o treino com mais 140 questões e simulado final.";
-    } else if (percentual >= 65) {
-      mensagem = "<b>Bom caminho.</b> Você tem base, mas ainda perde pontos que a FCC costuma cobrar em detalhe. Refaça o módulo e avance para o Premium para treinar o restante do edital.";
-    } else if (percentual >= 45) {
-      mensagem = "<b>Atenção.</b> Há lacunas importantes. Use os comentários como revisão e repita o treino hoje.";
-    } else {
-      mensagem = "<b>Risco alto.</b> Antes de avançar, revise teoria básica da matéria e refaça este módulo.";
-    }
-    diagnosticoFinal.innerHTML = `Aproveitamento: <b>${percentual}%</b><br>${mensagem}`;
-    trocarTela(screenResult);
-  }
-
-  function refazerModulo() {
-    if (moduloAtual) iniciarQuiz(moduloAtual);
-  }
-
-  function voltarInicio() {
-    if (audioBg) {
-      audioBg.pause();
-      audioBg.currentTime = 0;
-    }
-    moduloAtual = "";
-    questoesAtual = [];
-    indiceQuestao = 0;
-    acertos = 0;
-    trocarTela(screenStart);
-  }
-
-  const premiumModal = document.getElementById("premiumModal");
-  const premiumModalText = document.getElementById("premiumModalText");
-
-  function abrirPremium(nomeModulo) {
-    premiumModalText.textContent = `${nomeModulo} faz parte da versão completa do TJ CE 2026.`;
-    premiumModal.classList.add("show");
-  }
-
-  function fecharPremium() {
-    premiumModal.classList.remove("show");
-  }
-
-  premiumModal.addEventListener("click", function(e) {
-    if (e.target === premiumModal) fecharPremium();
-  });
-
-  document.addEventListener("keydown", function(e) {
-    if (e.key === "Escape") fecharPremium();
-  });
-
-  montarMenu();
+const banco={
+"1. Língua Portuguesa — FCC/TJ CE":[
+{q:"Na frase ‘O servidor encaminhou o processo à secretaria competente’, o emprego da crase está correto porque:",o:["o termo posterior é masculino e exige artigo.","há fusão da preposição exigida pelo verbo com artigo feminino.","todo termo ligado a processo exige crase.","a palavra secretaria está no plural.","a crase é obrigatória antes de qualquer substantivo."],c:1,comentario:"O verbo encaminhar exige a preposição 'a'; secretaria admite artigo feminino: a + a = à."},
+{q:"Assinale a alternativa em que a concordância verbal está correta.",o:["Houveram muitos recursos contra o edital.","Fazem três meses desde a publicação.","Existem candidatos de várias comarcas.","Deve haverem provas discursivas.","Tratam-se de normas administrativas."],c:2,comentario:"O verbo existir concorda com o sujeito plural: candidatos."},
+{q:"A palavra ‘judiciário’ recebe acento gráfico pela mesma regra de:",o:["café","câmara","necessário","juiz","país"],c:2,comentario:"Judiciário e necessário são paroxítonas terminadas em ditongo crescente."},
+{q:"Em ‘Embora o prazo fosse curto, os candidatos mantiveram o ritmo de estudos’, ‘Embora’ expressa ideia de:",o:["causa","condição","concessão","finalidade","comparação"],c:2,comentario:"Embora introduz oração concessiva."},
+{q:"Assinale a frase em que a pontuação está adequada.",o:["O candidato que estudou com antecedência, obteve bom resultado.","O candidato, que estudou com antecedência obteve, bom resultado.","O candidato que estudou com antecedência obteve bom resultado.","O candidato que estudou, com antecedência obteve bom resultado.","O candidato, que estudou, com antecedência obteve bom resultado."],c:2,comentario:"Não se separa sujeito de verbo por vírgula."},
+{q:"No trecho ‘A medida foi adotada pelo Tribunal’, a voz verbal é:",o:["ativa","passiva analítica","passiva sintética","reflexiva","recíproca"],c:1,comentario:"Foi adotada + agente da passiva caracteriza voz passiva analítica."},
+{q:"Assinale a alternativa em que há regência verbal correta.",o:["O técnico assistiu o magistrado na audiência.","O candidato obedeceu o edital.","O servidor informou ao chefe sobre o ocorrido.","O cidadão visou ao cargo público.","O analista preferiu estudar do que descansar."],c:3,comentario:"No sentido de desejar, visar exige preposição a: visou ao cargo público."},
+{q:"Em ‘O edital, publicado em maio, alterou a rotina dos candidatos’, a expressão entre vírgulas tem função de:",o:["vocativo","aposto explicativo","adjunto adverbial obrigatório","objeto direto","predicativo do sujeito"],c:1,comentario:"A expressão explica o termo edital e aparece isolada por vírgulas."},
+{q:"Assinale a alternativa em que a palavra destacada tem sentido conotativo.",o:["O processo chegou à secretaria.","A prova terá duração de quatro horas.","O edital acendeu a esperança dos candidatos.","O servidor consultou o sistema.","A inscrição foi confirmada."],c:2,comentario:"Acendeu a esperança é emprego figurado."},
+{q:"A forma correta de reescrita, mantendo o sentido, é:",o:["É necessário que os candidato estudem.","É necessário que os candidatos estudem.","É necessário os candidatos estudar.","É necessário que os candidatos estuda.","É necessários que os candidatos estudem."],c:1,comentario:"O verbo no subjuntivo concorda com os candidatos: estudem."}],
+"2. Raciocínio Lógico-Matemático":[
+{q:"Se todos os técnicos são servidores e alguns servidores atuam em comarcas do interior, é correto concluir necessariamente que:",o:["todos os técnicos atuam no interior.","alguns técnicos atuam no interior.","nenhum técnico atua no interior.","alguns servidores podem não ser técnicos.","todo servidor é técnico."],c:3,comentario:"As premissas não obrigam que os servidores do interior sejam técnicos."},
+{q:"Uma taxa de inscrição de R$ 100,00 recebeu acréscimo de 8%. O novo valor é:",o:["R$ 108,00","R$ 92,00","R$ 180,00","R$ 100,80","R$ 118,00"],c:0,comentario:"8% de 100 = 8. Valor final: 108."},
+{q:"Se 4 servidores analisam 48 processos em 6 horas, mantendo o mesmo ritmo, 6 servidores analisam 72 processos em:",o:["4 horas","5 horas","6 horas","7 horas","8 horas"],c:2,comentario:"Produtividade = 48/(4×6)=2 processos por servidor/hora. 72/(6×2)=6 horas."},
+{q:"A negação de ‘Todos os candidatos estudaram Direito Administrativo’ é:",o:["Nenhum candidato estudou Direito Administrativo.","Todos não estudaram Direito Administrativo.","Algum candidato não estudou Direito Administrativo.","Algum candidato estudou Direito Administrativo.","Direito Administrativo não foi estudado."],c:2,comentario:"A negação de universal afirmativa é particular negativa: algum não."},
+{q:"A sequência 2, 5, 11, 23, 47 segue padrão de multiplicar por 2 e somar 1. O próximo termo é:",o:["89","93","94","95","96"],c:3,comentario:"47×2+1=95."},
+{q:"Em uma turma, as notas foram 6, 7, 7, 8 e 10. A média aritmética é:",o:["7,0","7,2","7,4","7,6","8,0"],c:3,comentario:"Soma 38; 38/5 = 7,6."},
+{q:"A mediana dos valores 12, 7, 9, 15 e 10 é:",o:["7","9","10","12","15"],c:2,comentario:"Ordenando: 7, 9, 10, 12, 15. O valor central é 10."},
+{q:"Se uma prova tem 60 questões e o candidato acertou 75%, ele acertou:",o:["40","42","45","48","50"],c:2,comentario:"75% de 60 = 45."},
+{q:"A proposição ‘Se estudo, então aumento minhas chances’ é falsa somente quando:",o:["estudo e aumento minhas chances.","não estudo e aumento minhas chances.","estudo e não aumento minhas chances.","não estudo e não aumento minhas chances.","aumentar chances é impossível."],c:2,comentario:"P→Q só é falsa quando P é verdadeira e Q é falsa."},
+{q:"Três candidatos chegaram em ordem: Ana antes de Bruno; Carlos depois de Bruno. A ordem é:",o:["Ana, Carlos, Bruno","Bruno, Ana, Carlos","Ana, Bruno, Carlos","Carlos, Bruno, Ana","Bruno, Carlos, Ana"],c:2,comentario:"Ana vem antes de Bruno, e Carlos depois: Ana, Bruno, Carlos."}]};
+const todos=["1. Língua Portuguesa — FCC/TJ CE","2. Raciocínio Lógico-Matemático","3. Direitos das Pessoas com Deficiência","4. Legislação TJCE e Estatuto do Servidor CE","5. Direito Constitucional","6. Direito Administrativo e Rotina Judiciária","7. Informática e Processo Eletrônico","8. Simulado Final FCC — TJ CE 2026"];
+let atual=[],idx=0,acertos=0,nome="";const $=id=>document.getElementById(id);
+function tela(id){["start","quiz","result"].forEach(x=>$(x).classList.remove("active"));$(id).classList.add("active");window.scrollTo({top:0,behavior:"smooth"})}
+function montar(){const m=$("menu");m.innerHTML="";todos.forEach((n,i)=>{const b=document.createElement("button");const livre=!!banco[n];b.className="btn"+(livre?"":" locked");b.innerHTML=`<span>${n}</span><span>${livre?"10 QUESTÕES ▶":"🔒 PREMIUM"}</span>`;b.onclick=livre?()=>iniciar(n):()=>abrirPremium(n);m.appendChild(b)})}
+function iniciar(n){nome=n;atual=[...banco[n]].sort(()=>Math.random()-.5);idx=0;acertos=0;$("materia").textContent=n;tela("quiz");mostrar()}
+function mostrar(){const q=atual[idx];$("contador").textContent=`${idx+1}/${atual.length}`;$("question").textContent=q.q;$("options").innerHTML="";$("comment").style.display="none";$("next").style.display="none";q.o.forEach((op,i)=>{const b=document.createElement("button");b.className="btn option";b.innerHTML=`<strong>${String.fromCharCode(65+i)})</strong>&nbsp; ${op}`;b.onclick=()=>responder(i);$("options").appendChild(b)})}
+function responder(sel){const q=atual[idx];[...$("options").children].forEach((b,i)=>{b.disabled=true;if(i===q.c)b.classList.add("correct");if(i===sel&&i!==q.c)b.classList.add("wrong")});if(sel===q.c)acertos++;$("commentText").textContent=q.comentario;$("comment").style.display="block";$("next").style.display="block"}
+$("next").onclick=()=>{idx++;if(idx<atual.length)mostrar();else finalizar()};
+function finalizar(){const p=Math.round(acertos/atual.length*100);$("score").textContent=`${acertos}/${atual.length}`;$("diag").innerHTML=`Aproveitamento: <b>${p}%</b><br>${p>=85?"Excelente desempenho. Avance para o Premium para ampliar o treino.":p>=65?"Bom caminho. O Premium ajuda a cobrir o restante do edital.":"Há pontos importantes para revisar. Use os comentários e repita o módulo."}`;tela("result")}
+function voltar(){nome="";atual=[];idx=0;acertos=0;tela("start")}
+function abrirPremium(n){$("modalText").textContent=`${n} faz parte da versão completa do TJ CE 2026.`;$("premiumModal").classList.add("show")}
+function fecharPremium(){$("premiumModal").classList.remove("show")}
+$("premiumModal").addEventListener("click",e=>{if(e.target===$("premiumModal"))fecharPremium()});document.addEventListener("keydown",e=>{if(e.key==="Escape")fecharPremium()});montar();
 </script>
 </body>
 </html>
